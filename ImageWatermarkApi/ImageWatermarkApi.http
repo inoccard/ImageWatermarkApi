@@ -1,0 +1,6 @@
+@ImageWatermarkApi_HostAddress = http://localhost:5137
+
+GET {{ImageWatermarkApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
