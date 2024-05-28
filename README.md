@@ -54,8 +54,9 @@ Este projeto é uma API REST simples desenvolvida utilizando .NET 8 que permite 
     "Position": "Posição da assinatura"
   }  
 ```
+- Posições disponíveis: topleft, topright, bootomleft ou bootomright
+  
 ## Contribuição
 
-Posições disponíveis: topleft, topright, bootomleft ou bootomright
 Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas, enviar solicitações de pull e participar do desenvolvimento deste projeto. Consulte o [CONTRIBUTING.md](CONTRIBUTING.md#como-contribuir)
  para obter orientações sobre como contribuir.
