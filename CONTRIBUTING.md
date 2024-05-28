@@ -1,4 +1,4 @@
-# Contribuindo para [Sds.Events]
+# Contribuindo para [ImageWatermarkApi]
 
 Obrigado por considerar contribuir para este projeto! Sua participação é muito bem-vinda.
 
