@@ -16,6 +16,9 @@ public class ImageController : ControllerBase
     {
         try
         {
+            if (IsNullOrEmpty(request) || IsStringContent(request) || !IsBase64String(request.Base64Image))
+                return BadRequest("dados inválidos");
+
             using Image image = LoadImage(request);
 
             PointF location = GetWatermarkPosition(request.Position, image);
@@ -32,6 +35,34 @@ public class ImageController : ControllerBase
         }
     }
 
+    #region private methods 
+
+    private static bool IsNullOrEmpty(ImageRequest request)
+    {
+        return string.IsNullOrEmpty(request.Base64Image) ||
+               string.IsNullOrEmpty(request.WatermarkText) ||
+               string.IsNullOrEmpty(request.Position);
+    }
+
+    private static bool IsStringContent(ImageRequest request)
+    {
+        return request.Base64Image.Equals("string") ||
+               request.WatermarkText.Equals("string") ||
+               request.Position.Equals("string");
+    }
+
+    private static bool IsBase64String(string base64Image)
+    {
+        if (base64Image.Length % 4 != 0 ||
+            base64Image.Contains(' ') ||
+            base64Image.Contains('\t') ||
+            base64Image.Contains('\r') ||
+            base64Image.Contains('\n'))
+            return false;
+
+        return true;
+
+    }
     /// <summary>
     /// Carregar imagem
     /// </summary>
@@ -88,5 +119,6 @@ public class ImageController : ControllerBase
         resultBase64 = Convert.ToBase64String(ms.ToArray());
     }
 
+    #endregion private methods
 }
 
