@@ -11,14 +11,22 @@ namespace ImageWatermarkApi.Controllers;
 [Route("api/[controller]")]
 public class ImageController : ControllerBase
 {
-    [HttpPost]
+    /// <summary>
+    /// Aplica marca d'água na imagem
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("apply-watermark")]
     public IActionResult AddWatermark([FromBody] ImageRequest request)
     {
+        if (IsNullOrEmpty(request) || IsStringContent(request))
+            return BadRequest("dados inválidos");
+
+        if (!IsBase64String(request.Base64Image))
+            return BadRequest("A imagem fornecida não é uma string base64 válida");
+
         try
         {
-            if (IsNullOrEmpty(request) || IsStringContent(request) || !IsBase64String(request.Base64Image))
-                return BadRequest("dados inválidos");
-
             using Image image = LoadImage(request);
 
             PointF location = GetWatermarkPosition(request.Position, image);
@@ -32,6 +40,32 @@ public class ImageController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Converte imagem base64 para imagem real
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("convert-to-image")]
+    public IActionResult ConvertBase64ToImage([FromBody] Base64ImageRequest request)
+    {
+        if (string.IsNullOrEmpty(request.Base64Image))
+            return BadRequest("dados inválidos");
+
+        if (!IsBase64String(request.Base64Image))
+            return BadRequest("A imagem fornecida não é uma string base64 válida");
+
+        try
+        {
+            var imageBytes = Convert.FromBase64String(request.Base64Image);
+            using var ms = new MemoryStream(imageBytes);
+            return File(ms.ToArray(), "image/png");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
 
